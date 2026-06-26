@@ -70,7 +70,7 @@ export default function StockManagement() {
   const handleDelete = async (productId, name) => {
     if (!window.confirm(`Are you sure you want to delete ${name}?`)) return
     try {
-      await fetch(`http://localhost:3001/api/admin/products/${productId}`, {
+      await fetch(`https://sharadha-stores-u3sv.vercel.app/api/admin/products/${productId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${adminKey}` }
       })
