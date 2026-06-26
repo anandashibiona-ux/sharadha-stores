@@ -4,17 +4,9 @@ const validate = require('../middleware/validateRequest');
 const adminAuth = require('../middleware/adminAuth');
 const ctrl = require('../controllers/admin.controller');
 const multer = require('multer');
-const path = require('path');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // We assume the public/uploads folder will exist or we can just save it inside public/images
-    cb(null, path.join(__dirname, '../../public/images'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+// Use memory storage to prevent Vercel filesystem crashes
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const router = Router();
