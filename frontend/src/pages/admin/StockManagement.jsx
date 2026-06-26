@@ -72,7 +72,7 @@ export default function StockManagement() {
     try {
       await fetch(`https://sharadha-stores-u3sv.vercel.app/api/admin/products/${productId}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${adminKey}` }
+        headers: { 'x-admin-key': adminKey }
       })
       setProducts(products.filter(p => p.id !== productId))
     } catch (err) {
@@ -216,4 +216,3 @@ export default function StockManagement() {
     </div>
   )
 }
-
