@@ -64,7 +64,7 @@ export default function AddProductModal({ onClose, onSuccess, adminKey }) {
 
       const res = await axios.post('https://sharadha-stores-u3sv.vercel.app/api/admin/products', data, {
         headers: {
-          'Authorization': `Bearer ${adminKey}`,
+          'x-admin-key': adminKey,
           'Content-Type': 'multipart/form-data'
         }
       })
@@ -194,4 +194,3 @@ export default function AddProductModal({ onClose, onSuccess, adminKey }) {
     </div>
   )
 }
-
