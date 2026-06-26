@@ -28,7 +28,7 @@ export default function AdminCategories() {
   const fetchCategories = async () => {
     setLoading(true)
     try {
-      const res = await axios.get('http://localhost:3001/api/categories')
+      const res = await axios.get('https://sharadha-stores-u3sv.vercel.app/api/categories')
       setCategories(res.data)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load categories')
@@ -40,7 +40,7 @@ export default function AdminCategories() {
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Are you sure you want to delete ${name}?`)) return;
     try {
-      await axios.delete(`http://localhost:3001/api/categories/${id}`)
+      await axios.delete(`https://sharadha-stores-u3sv.vercel.app/api/categories/${id}`)
       setCategories(categories.filter(c => c.id !== id))
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to delete category')
@@ -52,7 +52,7 @@ export default function AdminCategories() {
     if (!newCategoryName.trim()) return
     setAdding(true)
     try {
-      const res = await axios.post('http://localhost:3001/api/categories', { name: newCategoryName })
+      const res = await axios.post('https://sharadha-stores-u3sv.vercel.app/api/categories', { name: newCategoryName })
       setCategories(prev => [...prev, res.data].sort((a, b) => a.name.localeCompare(b.name)))
       setNewCategoryName('')
     } catch (err) {
