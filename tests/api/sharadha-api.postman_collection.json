@@ -1,0 +1,195 @@
+{
+  "info": {
+    "name": "Sharadha Stores API",
+    "_postman_id": "sharadha-stores-api-v1",
+    "description": "Cart & Checkout System API — Sharadha Stores",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:3001/api" },
+    { "key": "SESSION_ID", "value": "test-session-001" },
+    { "key": "ADMIN_KEY", "value": "sharadha-admin-2024" },
+    { "key": "PRODUCT_ID", "value": "" },
+    { "key": "CART_ITEM_ID", "value": "" },
+    { "key": "ORDER_ID", "value": "" },
+    { "key": "ORDER_NUMBER", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List all products",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/products", "host": ["{{BASE_URL}}/products"] }
+          }
+        },
+        {
+          "name": "List products — search",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/products?search=mango", "host": ["{{BASE_URL}}/products"], "query": [{ "key": "search", "value": "mango" }] }
+          }
+        },
+        {
+          "name": "List products — by category",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/products?category=Pickles", "host": ["{{BASE_URL}}/products"], "query": [{ "key": "category", "value": "Pickles" }] }
+          }
+        },
+        {
+          "name": "List products — in stock only",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/products?inStock=true", "host": ["{{BASE_URL}}/products"], "query": [{ "key": "inStock", "value": "true" }] }
+          }
+        },
+        {
+          "name": "Get product by slug",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/products/homemade-mango-pickle"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get cart",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/cart/{{SESSION_ID}}"
+          }
+        },
+        {
+          "name": "Add item to cart",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/cart/{{SESSION_ID}}/items",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"productId\": \"{{PRODUCT_ID}}\", \"quantity\": 2 }"
+            }
+          }
+        },
+        {
+          "name": "Update cart item quantity",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/cart/{{SESSION_ID}}/items/{{CART_ITEM_ID}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"quantity\": 3 }" }
+          }
+        },
+        {
+          "name": "Remove cart item",
+          "request": {
+            "method": "DELETE",
+            "url": "{{BASE_URL}}/cart/{{SESSION_ID}}/items/{{CART_ITEM_ID}}"
+          }
+        },
+        {
+          "name": "Clear cart",
+          "request": {
+            "method": "DELETE",
+            "url": "{{BASE_URL}}/cart/{{SESSION_ID}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Place order",
+          "request": {
+            "method": "POST",
+            "url": "{{BASE_URL}}/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"{{SESSION_ID}}\",\n  \"customer\": {\n    \"name\": \"Priya Sharma\",\n    \"phone\": \"9876543210\",\n    \"email\": \"priya@example.com\",\n    \"addressLine1\": \"12, Gandhi Street\",\n    \"addressLine2\": \"Near Temple\",\n    \"city\": \"Chennai\",\n    \"state\": \"Tamil Nadu\",\n    \"pincode\": \"600001\",\n    \"deliveryNotes\": \"Ring the bell\"\n  },\n  \"deliveryOption\": \"standard\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get order by order number",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/orders/{{ORDER_NUMBER}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "List all orders",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/admin/orders",
+            "header": [{ "key": "x-admin-key", "value": "{{ADMIN_KEY}}" }]
+          }
+        },
+        {
+          "name": "List orders by status",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/admin/orders?status=PENDING", "query": [{ "key": "status", "value": "PENDING" }] },
+            "header": [{ "key": "x-admin-key", "value": "{{ADMIN_KEY}}" }]
+          }
+        },
+        {
+          "name": "Update order status",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/admin/orders/{{ORDER_ID}}/status",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-admin-key", "value": "{{ADMIN_KEY}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{ \"status\": \"CONFIRMED\" }" }
+          }
+        },
+        {
+          "name": "List all stock",
+          "request": {
+            "method": "GET",
+            "url": "{{BASE_URL}}/admin/stock",
+            "header": [{ "key": "x-admin-key", "value": "{{ADMIN_KEY}}" }]
+          }
+        },
+        {
+          "name": "Update stock quantity",
+          "request": {
+            "method": "PATCH",
+            "url": "{{BASE_URL}}/admin/stock/{{PRODUCT_ID}}",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-admin-key", "value": "{{ADMIN_KEY}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{ \"quantity\": 50 }" }
+          }
+        }
+      ]
+    }
+  ]
+}

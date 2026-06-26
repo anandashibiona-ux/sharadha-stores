@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      String   @default("CUSTOMER") // "CUSTOMER" or "ADMIN"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  orders    Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id                  String      @id @default(uuid())
+  name                String
+  slug                String      @unique
+  description         String
+  shortDescription    String
+  price               Float
+  imageUrl            String
+  categoryId          Int?
+  category            Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  stockQuantity       Int         @default(0)
+  lowStockThreshold   Int         @default(5)
+  isActive            Boolean     @default(true)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  cartItems           CartItem[]
+  orderItems          OrderItem[]
+
+  @@map("products")
+}
+
+model CartItem {
+  id          String    @id @default(uuid())
+  sessionId   String
+  productId   String
+  quantity    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, productId])
+  @@map("cart_items")
+}
+
+model Customer {
+  id            String    @id @default(uuid())
+  name          String
+  phone         String
+  email         String?
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  state         String
+  pincode       String
+  deliveryNotes String?
+  createdAt     DateTime  @default(now())
+
+  orders        Order[]
+
+  @@map("customers")
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  orderNumber     String        @unique
+  userId          String?
+  customerId      String
+  status          String        @default("PENDING")
+  paymentStatus   String        @default("PENDING")
+  paymentMethod   String        @default("CASH_ON_DELIVERY")
+  
+  subtotal        Float
+  taxAmount       Float         @default(0)
+  deliveryFee     Float         @default(0)
+  discountApplied Float         @default(0)
+  total           Float         // Final Amount
+  
+  deliveryOption  String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User?         @relation(fields: [userId], references: [id])
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  orderItems      OrderItem[]
+  payment         Payment?
+
+  @@map("orders")
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  transactionId   String   @unique
+  gatewayTxnId    String?  // Actual Gateway Transaction ID
+  orderId         String   @unique
+  amount          Float
+  currency        String   @default("INR")
+  paymentMethod   String
+  paymentStatus   String
+  paymentDetails  String?
+  gatewayResponse String?  // JSON string
+  refundStatus    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model OrderItem {
+  id            String    @id @default(uuid())
+  orderId       String
+  productId     String
+  productName   String    // snapshot at order time
+  unitPrice     Float     // snapshot at order time
+  quantity      Int
+  lineTotal     Float
+
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product   @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
