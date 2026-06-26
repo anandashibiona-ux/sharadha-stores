@@ -20,7 +20,7 @@ export default function AddProductModal({ onClose, onSuccess, adminKey }) {
 
   useEffect(() => {
     // Fetch categories for the dropdown
-    axios.get('http://localhost:3001/api/categories')
+    axios.get('https://sharadha-stores-u3sv.vercel.app/api/categories')
       .then(res => setCategories(res.data))
       .catch(err => console.error("Failed to load categories", err))
   }, [])
@@ -62,7 +62,7 @@ export default function AddProductModal({ onClose, onSuccess, adminKey }) {
         data.append('image', formData.imageFile)
       }
 
-      const res = await axios.post('http://localhost:3001/api/admin/products', data, {
+      const res = await axios.post('https://sharadha-stores-u3sv.vercel.app/api/admin/products', data, {
         headers: {
           'Authorization': `Bearer ${adminKey}`,
           'Content-Type': 'multipart/form-data'
