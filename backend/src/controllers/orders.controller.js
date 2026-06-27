@@ -232,13 +232,11 @@ const verifyPayment = async (req, res, next) => {
     if (paymentMethod === 'CASH_ON_DELIVERY') {
       paymentStatus = 'CONFIRMED';
       transactionId = `COD-${Date.now()}`;
-    } else if (paymentMethod === 'UPI') {
-      paymentStatus = 'VERIFICATION_PENDING';
-      transactionId = `UPI-${paymentDetails?.upiId || 'MANUAL'}-${Date.now()}`;
     } else {
       const isValid = paymentService.verifyPaymentSignature(paymentData);
       if (!isValid) throw createError(400, 'Invalid payment signature');
 
+      if (paymentMethod === 'UPI') paymentStatus = 'VERIFICATION_PENDING';
       transactionId = paymentData.razorpay_payment_id || paymentData.mock_payment_id;
       gatewayResponse = JSON.stringify(paymentData);
     }
