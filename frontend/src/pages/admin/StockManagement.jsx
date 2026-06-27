@@ -70,7 +70,8 @@ export default function StockManagement() {
   const handleDelete = async (productId, name) => {
     if (!window.confirm(`Are you sure you want to delete ${name}?`)) return
     try {
-      await fetch(`https://sharadha-stores-u3sv.vercel.app/api/admin/products/${productId}`, {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+      await fetch(`${API_BASE_URL}/api/admin/products/${productId}`, {
         method: 'DELETE',
         headers: { 'x-admin-key': adminKey }
       })
@@ -183,7 +184,6 @@ export default function StockManagement() {
                                   {saving === product.id ? '...' : 'Save'}
                                 </button>
                               )}
-                              {/* Delete button icon */}
                               <button onClick={() => handleDelete(product.id, product.name)} className="text-gray-300 hover:text-red-500 p-1.5 transition-colors absolute right-6" title="Delete product">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
