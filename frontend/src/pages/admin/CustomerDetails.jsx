@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import axios from 'axios'
+import { getOrdersByPhone } from '../../services/api'
 import AdminHeader from '../../components/admin/AdminHeader'
 import { PageLoader, ErrorState } from '../../components/common/StateComponents'
 import { formatCurrency } from '../../utils/validators'
@@ -28,8 +28,8 @@ export default function CustomerDetails() {
     setLoading(true)
     setError(null)
     try {
-      const res = await axios.get(`http://localhost:3001/api/orders/customer/${phone}`)
-      setOrders(res.data)
+      const data = await getOrdersByPhone(phone)
+      setOrders(data)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load customer details')
     } finally {
