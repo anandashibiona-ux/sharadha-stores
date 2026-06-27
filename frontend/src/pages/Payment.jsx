@@ -114,9 +114,38 @@ export default function Payment() {
     }
   }
 
+  const processUPI = async () => {
+    setSubmitting(true)
+    setApiError(null)
+    try {
+      const order = await verifyOrderPayment('intent-upi', {
+        sessionId,
+        customer,
+        deliveryOption,
+        paymentMethod: 'UPI',
+        paymentData: { method: 'UPI', upiId: paymentDetails.upiId },
+        paymentDetails
+      })
+      
+      const existingOrders = JSON.parse(localStorage.getItem('savedOrderNumbers') || '[]')
+      if (!existingOrders.includes(order.orderNumber)) {
+        existingOrders.push(order.orderNumber)
+        localStorage.setItem('savedOrderNumbers', JSON.stringify(existingOrders))
+      }
+      await fetchCart() // clear cart in UI
+      navigate(`/order/${order.orderNumber}`, { replace: true })
+    } catch (err) {
+      setApiError('Failed to confirm order. Please try again.')
+      setSubmitting(false)
+    }
+  }
+
   const processPayment = async () => {
     if (paymentMethod === 'CASH_ON_DELIVERY') {
       return processCOD()
+    }
+    if (paymentMethod === 'UPI') {
+      return processUPI()
     }
     
     // Online validation
