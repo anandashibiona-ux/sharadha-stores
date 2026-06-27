@@ -16,7 +16,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (location.pathname.startsWith('/admin')) {
+  // Case-insensitive check to hide the customer navbar on admin routes (e.g. /Admin)
+  if (location.pathname.toLowerCase().startsWith('/admin')) {
     return null;
   }
 
