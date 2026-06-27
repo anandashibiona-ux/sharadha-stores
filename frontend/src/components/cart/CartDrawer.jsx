@@ -32,7 +32,7 @@ export default function CartDrawer({ open, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <h2 className="font-serif text-lg text-charcoal">
-            Your Cart {cart.itemCount > 0 && <span className="text-muted text-sm font-sans">({cart.itemCount} items)</span>}
+            Your Cart {cart.itemCount > 0 && <span className="text-muted text-sm font-sans">({cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'})</span>}
           </h2>
           <button
             id="close-cart-drawer"
