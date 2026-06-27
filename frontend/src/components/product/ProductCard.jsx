@@ -61,7 +61,7 @@ export default function ProductCard({ product }) {
         <button
           onClick={(e) => {
             e.preventDefault();
-            if (!inCart) addToCart(product.id, 1);
+            if (!inCart) addToCart(product, 1);
           }}
           disabled={product.stockQuantity === 0}
           className={`w-full text-[14px] font-semibold py-2.5 rounded-md
