@@ -158,7 +158,7 @@ export default function Payment() {
           amount: intent.amount,
           currency: intent.currency,
           name: 'Sharadha Stores',
-          description: `Order ${orderNumber}`,
+          description: `Order ${intent.orderId}`,
           order_id: intent.orderId,
           prefill: {
             name: intent.customer.name,
