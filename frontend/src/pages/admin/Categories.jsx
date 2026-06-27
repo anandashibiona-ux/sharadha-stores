@@ -12,10 +12,9 @@ export default function AdminCategories() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   
-  // Inline add category state
   const [newCategoryName, setNewCategoryName] = useState('')
   const [adding, setAdding] = useState(false)
-  
+
   if (!adminKey) {
     return (
       <div className="page-container py-12 text-center">
@@ -25,10 +24,12 @@ export default function AdminCategories() {
     )
   }
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+
   const fetchCategories = async () => {
     setLoading(true)
     try {
-      const res = await axios.get('https://sharadha-stores-u3sv.vercel.app/api/categories')
+      const res = await axios.get(`${API_BASE_URL}/api/categories`)
       setCategories(res.data)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load categories')
@@ -40,7 +41,7 @@ export default function AdminCategories() {
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Are you sure you want to delete ${name}?`)) return;
     try {
-      await axios.delete(`https://sharadha-stores-u3sv.vercel.app/api/categories/${id}`)
+      await axios.delete(`${API_BASE_URL}/api/categories/${id}`)
       setCategories(categories.filter(c => c.id !== id))
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to delete category')
@@ -52,7 +53,7 @@ export default function AdminCategories() {
     if (!newCategoryName.trim()) return
     setAdding(true)
     try {
-      const res = await axios.post('https://sharadha-stores-u3sv.vercel.app/api/categories', { name: newCategoryName })
+      const res = await axios.post(`${API_BASE_URL}/api/categories`, { name: newCategoryName })
       setCategories(prev => [...prev, res.data].sort((a, b) => a.name.localeCompare(b.name)))
       setNewCategoryName('')
     } catch (err) {
@@ -136,4 +137,3 @@ export default function AdminCategories() {
     </div>
   )
 }
-
