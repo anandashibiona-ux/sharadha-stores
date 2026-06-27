@@ -236,38 +236,19 @@ export function PaymentOptions({ selected, onChange, details, onDetailsChange, t
       icon: '📱',
       description: 'Google Pay, PhonePe, Paytm, etc.',
       renderForm: () => {
-        const upiString = `upi://pay?pa=kingpavanp@ybl&pn=MULINTI%20PAVAN%20KUMAR&am=${totalAmount || 0}&cu=INR`;
-
         return (
-          <div className="mt-4 px-1 animate-fade-in border-t border-border pt-3">
-            <div className="mt-3 flex items-center justify-center p-4 bg-white rounded-md border border-dashed border-muted">
-              <div className="text-center flex flex-col items-center">
-                <QRCodeSVG value={upiString} size={150} level="M" />
-                <p className="text-sm font-semibold text-charcoal mt-3 mb-1">Scan to Pay</p>
-                <p className="text-xs text-muted">Use PhonePe, GPay, or Paytm</p>
-              </div>
-            </div>
-
-            <div className="mt-4 text-center">
-              <span className="text-xs text-muted font-medium uppercase tracking-wider bg-surface px-2">Or Enter Manually</span>
-            </div>
-
-            <div className="mt-3">
-              <label className="label text-xs">Enter UPI ID (VPA) *</label>
-              <input type="text" placeholder="username@upi" 
-                className="input text-sm" value={details?.upiId || ''} 
-                onChange={e => onDetailsChange('upiId', e.target.value)} />
-            </div>
-            <div className="mt-4 pt-2">
-              <button 
-                type="button"
-                onClick={onSubmit} 
-                disabled={isSubmitting}
-                className="btn-primary w-full py-3 text-sm flex items-center justify-center"
-              >
-                {isSubmitting ? 'Confirming...' : `I've Paid ${formatCurrency(totalAmount)}`}
-              </button>
-            </div>
+          <div className="mt-4 px-1 animate-fade-in border-t border-border pt-4">
+            <p className="text-sm text-muted mb-4 leading-relaxed">
+              Pay securely using Google Pay, PhonePe, Paytm, or any UPI app. Your payment will be verified in real-time.
+            </p>
+            <button 
+              type="button"
+              onClick={onSubmit} 
+              disabled={isSubmitting}
+              className="btn-primary w-full py-3 text-sm flex items-center justify-center font-medium"
+            >
+              {isSubmitting ? 'Processing...' : `Pay ${formatCurrency(totalAmount)} with UPI`}
+            </button>
           </div>
         )
       }
@@ -279,106 +260,54 @@ export function PaymentOptions({ selected, onChange, details, onDetailsChange, t
       description: 'Pay when your order arrives',
       renderForm: () => (
         <div className="mt-4 px-1 animate-fade-in border-t border-border pt-4">
+          <p className="text-sm text-muted mb-4 leading-relaxed font-normal">
+            No upfront payment required. You will pay for the order in cash or UPI when the delivery arrives at your door.
+          </p>
           <button 
             type="button"
             onClick={onSubmit} 
             disabled={isSubmitting}
-            className="btn-primary w-full py-3 text-sm flex items-center justify-center"
+            className="btn-primary w-full py-3 text-sm flex items-center justify-center font-semibold"
           >
-            {isSubmitting ? 'Confirming...' : 'Confirm Order (COD)'}
+            {isSubmitting ? 'Confirming Order...' : 'Place Order (Cash on Delivery)'}
           </button>
         </div>
       )
-    },
+    }
   ]
 
   return (
-    <div>
-      <h3 className="font-medium text-charcoal mb-3">Payment Method</h3>
+    <div className="space-y-4">
+      <h2 className="font-serif text-xl text-charcoal">Payment Method</h2>
       <div className="space-y-3">
         {options.map((opt) => (
-          <div key={opt.id} className={`p-4 rounded-md border transition-colors
-              ${selected === opt.id
-                ? 'border-accent bg-accent-light bg-opacity-30'
+          <div 
+            key={opt.id} 
+            className={`border rounded-lg p-4 transition-all duration-200
+              ${selected === opt.id 
+                ? 'border-accent bg-accent-light/30 shadow-[0_4px_12px_rgba(217,119,6,0.03)]' 
                 : 'border-border bg-surface hover:border-muted'
-              }`}>
-            <label
-              htmlFor={`payment-${opt.id}`}
-              className="flex items-center gap-3 cursor-pointer"
-            >
+              }`}
+          >
+            <label htmlFor={`pay-${opt.id}`} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="radio"
-                id={`payment-${opt.id}`}
+                id={`pay-${opt.id}`}
                 name="paymentMethod"
                 value={opt.id}
                 checked={selected === opt.id}
                 onChange={() => onChange(opt.id)}
-                className="accent-accent flex-shrink-0"
+                className="accent-accent w-4 h-4"
               />
-              <span className="text-2xl ml-1">{opt.icon}</span>
-              <div className="flex-1 ml-1">
-                <p className="text-sm font-medium text-charcoal">{opt.label}</p>
-                <p className="text-xs text-muted">{opt.description}</p>
+              <span className="text-lg">{opt.icon}</span>
+              <div className="flex-1">
+                <span className="text-sm font-semibold text-charcoal block">{opt.label}</span>
+                <span className="text-xs text-muted block mt-0.5">{opt.description}</span>
               </div>
             </label>
             {selected === opt.id && opt.renderForm()}
           </div>
         ))}
-      </div>
-      <div className="mt-5 flex items-center justify-center gap-6 p-4 bg-[#f0fdf4] border border-[#bbf7d0] rounded-md">
-        <div className="flex items-center gap-2 text-[#166534]">
-          <span className="text-xl">🔒</span>
-          <p className="text-xs font-semibold">256-bit SSL Encrypted</p>
-        </div>
-        <div className="w-px h-6 bg-[#166534] opacity-20" />
-        <div className="flex items-center gap-2 text-[#166534]">
-          <span className="text-xl">✅</span>
-          <p className="text-xs font-semibold">100% Secure Payments</p>
-        </div>
-      </div>
-      <p className="text-xs text-muted mt-4 text-center">Note: Payment gateway integration is simulated for this prototype.</p>
-    </div>
-  )
-}
-
-export function OrderSummary({ cart, deliveryOption }) {
-  const DELIVERY_FEE = { standard: 50, express: 120 }
-  const fee = cart.subtotal >= 500 ? 0 : (DELIVERY_FEE[deliveryOption] ?? 50)
-  const total = cart.subtotal + fee
-
-  return (
-    <div className="bg-background rounded-lg p-5 space-y-3">
-      <h3 className="font-serif text-lg text-charcoal">Order Summary</h3>
-
-      <div className="space-y-2 max-h-52 overflow-y-auto">
-        {cart.items.map((item) => (
-          <div key={item.id} className="flex items-center gap-2.5">
-            <img src={item.product.imageUrl} alt={item.product.name}
-              className="w-10 h-10 rounded-md object-cover flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-charcoal truncate">{item.product.name}</p>
-              <p className="text-xs text-muted">× {item.quantity}</p>
-            </div>
-            <span className="text-xs font-medium text-charcoal flex-shrink-0">
-              {formatCurrency(item.lineTotal)}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="divider my-3" />
-
-      <div className="space-y-1.5 text-sm">
-        <div className="flex justify-between text-muted">
-          <span>Subtotal</span><span>{formatCurrency(cart.subtotal)}</span>
-        </div>
-        <div className="flex justify-between text-muted">
-          <span>Delivery</span>
-          <span>{fee === 0 ? <span className="text-success font-medium">Free</span> : formatCurrency(fee)}</span>
-        </div>
-        <div className="flex justify-between font-semibold text-charcoal text-base pt-2 border-t border-border">
-          <span>Total</span><span>{formatCurrency(total)}</span>
-        </div>
       </div>
     </div>
   )
