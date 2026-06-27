@@ -49,7 +49,7 @@ export default function Cart() {
               <h2 className="font-serif text-lg text-charcoal">Order Summary</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-muted">
-                  <span>Subtotal ({cart.itemCount} items)</span>
+                  <span>Subtotal ({cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'})</span>
                   <span>{formatCurrency(cart.subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-muted">
