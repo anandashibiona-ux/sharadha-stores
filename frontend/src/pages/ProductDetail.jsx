@@ -26,7 +26,7 @@ export default function ProductDetail() {
 
   const handleAdd = async () => {
     setAdding(true)
-    const result = await addToCart(product.id, quantity)
+    const result = await addToCart(product, quantity)
     setAdding(false)
     if (!result.success) {
       setFeedback({ type: 'error', message: result.message })
@@ -82,15 +82,15 @@ export default function ProductDetail() {
             <div className="flex items-center gap-3 mb-4">
               <div className="flex items-center border border-border rounded-md overflow-hidden">
                 <button
-                  id="qty-decrease"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 flex items-center justify-center text-muted hover:text-charcoal hover:bg-background transition-colors"
+                   id="qty-decrease"
+                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                   className="w-10 h-10 flex items-center justify-center text-muted hover:text-charcoal hover:bg-background transition-colors"
                 >–</button>
                 <span className="w-10 text-center text-sm font-medium">{quantity}</span>
                 <button
-                  id="qty-increase"
-                  onClick={() => setQuantity(Math.min(product.stockQuantity, quantity + 1))}
-                  className="w-10 h-10 flex items-center justify-center text-muted hover:text-charcoal hover:bg-background transition-colors"
+                   id="qty-increase"
+                   onClick={() => setQuantity(Math.min(product.stockQuantity, quantity + 1))}
+                   className="w-10 h-10 flex items-center justify-center text-muted hover:text-charcoal hover:bg-background transition-colors"
                 >+</button>
               </div>
               <button
