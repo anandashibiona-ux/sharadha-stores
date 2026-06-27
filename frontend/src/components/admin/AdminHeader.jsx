@@ -28,7 +28,8 @@ export default function AdminHeader({ onSignOut }) {
           {/* CENTER — Navigation Tabs */}
           <nav className="flex items-center gap-1 sm:gap-2 flex-1 justify-center overflow-x-auto px-2 mx-2 scrollbar-hide">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path
+              // Case-insensitive active check
+              const isActive = location.pathname.toLowerCase() === link.path.toLowerCase()
               return (
                 <Link
                   key={link.name}
