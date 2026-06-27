@@ -11,9 +11,8 @@ export default function AddCategoryModal({ onClose, onSuccess }) {
     setLoading(true)
     setError(null)
     try {
-      // The admin route might need admin authentication or maybe it is public?
-      // Based on categories.routes.js, it's not protected by adminAuth yet, but we should hit it anyway.
-      const res = await axios.post('http://localhost:3001/api/categories', { name })
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
+      const res = await axios.post(`${API_BASE_URL}/api/categories`, { name })
       onSuccess(res.data)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to add category')
